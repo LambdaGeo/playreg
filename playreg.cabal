@@ -1,0 +1,46 @@
+cabal-version:      3.0
+name:               playreg
+version:            0.1.0.0
+synopsis:           A regex engine via Brzozowski derivatives, generalized to weighted matching with semirings
+description:
+    PlayReg is a small regex engine built around Brzozowski derivatives,
+    following the "A Play on Regular Expressions" functional pearl
+    (Fischer, Huch, Wilke), extended with a Semiring abstraction so the
+    same matching logic can compute a Bool (accept/reject), an Int
+    (count of matching derivations), or a submatch position via the
+    Leftmost and LeftLong semirings. See README.md for details.
+license:            NONE
+author:             Sergio Costa
+maintainer:         skosta@gmail.com
+build-type:         Simple
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    exposed-modules:
+        PlayReg.RegExp
+    build-depends:
+        base >= 4.14 && < 5
+
+executable playreg-demo
+    import:           warnings
+    hs-source-dirs:   app
+    main-is:          Main.hs
+    default-language: Haskell2010
+    build-depends:
+        base    >= 4.14 && < 5,
+        playreg
+
+test-suite playreg-test
+    import:           warnings
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Spec.hs
+    default-language: Haskell2010
+    build-depends:
+        base    >= 4.14 && < 5,
+        playreg
