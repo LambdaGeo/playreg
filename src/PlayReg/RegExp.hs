@@ -174,6 +174,7 @@ simplify r          = r
 --"hello there" =~ "e" :: Bool
 -- https://gabebw.com/blog/2015/10/11/regular-expressions-in-haskell
 
+matchPS :: String -> String -> Bool
 matchPS r s = match (parseReg r) s
 
 -- ((a|b)*c(a|b)*c)*(a|b)*
@@ -200,7 +201,7 @@ empty EPS = True
 empty (SYM _ _) = False
 empty (ALT p q) = empty p || empty q
 empty (SEQ p q) = empty p && empty q
-empty (REP r) = True
+empty (REP _) = True
 
 final :: REG -> Bool
 final EPS = False
@@ -250,10 +251,11 @@ data REw c s
   | REPw (REGw c s) --α*
 
 instance Show (REw c s) where
-  show (EPSw) = "ε"
-
---show (SYMw f) = [f]
---show (ALTw p q) = (show p) ++ "|" ++ (show q)
+  show EPSw = "ε"
+  show (SYMw _) = "<sym>" -- the wrapped function c -> s has no Show instance
+  show (ALTw _ _) = "<alt>" -- REGw itself has no Show instance to recurse into
+  show (SEQw _ _) = "<seq>"
+  show (REPw _) = "<rep>"
 
 epsw :: Semiring s => REGw c s
 epsw =
@@ -406,9 +408,11 @@ mkRegexP :: Semiringi s => String -> REGw (Int, Char) s
 mkRegexP [] = epsw
 mkRegexP (x : xs) = seqw (symi x) (mkRegexP xs)
 
---- testes
-
--- nao está dando os resultados esperados
+-- Example values used by the tests in test/Spec.hs and by the demo in
+-- app/Main.hs. The original comment here said "nao esta dando os
+-- resultados esperados" (not giving the expected results) -- that was
+-- LeftLong's (<+>) crashing on any pattern with a Rep matching the
+-- empty string (see 'ab' below). Fixed; see the README.
 
 a, ab, aaba, aib :: Semiringi s => REGw (Int, Char) s
 a = symi 'a'
