@@ -89,3 +89,11 @@ playreg/
 ├── app/Main.hs              -- demo executable
 └── test/Spec.hs             -- 17 regression tests
 ```
+
+## Related work / Citação
+
+BENEVIDES, Marcos Vinicius Moreira Serra. **Implementação e análise
+de uma engine para expressões regulares em Coq via testes baseados
+em propriedades**. 2019. Trabalho de Conclusão de Curso (Ciência da
+Computação) — Universidade Federal do Maranhão, São Luís, 2019.
+Disponível em: <http://hdl.handle.net/123456789/3952>.
